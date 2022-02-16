@@ -1,0 +1,37 @@
+image: docker:latest
+services:
+  - docker:dind
+
+stages:
+  - assemble
+  - test
+  - sonarqube
+
+assemble:
+  image: gradle:latest
+  stage: assemble
+  script:
+    - gradle assemble
+  artifacts:
+    paths:
+      - build/libs/*.jar
+
+test:
+  image: gradle:latest
+  stage: test
+  script:
+    - gradle test
+  artifacts:
+    paths:
+      - build/libs/*.jar
+
+sonarqube:
+  image: gradle:jdk11
+  stage: sonarqube
+  script:
+    - chmod +x ./gradlew 
+    - ./gradlew sonarqube
+  allow_failure: true
+
+after_script:
+  - echo "End CI"

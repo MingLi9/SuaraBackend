@@ -1,0 +1,54 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.6'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'com.avast.gradle.docker-compose' version '0.14.3'
+	id 'jacoco'
+	id 'org.sonarqube' version '3.3'
+}
+
+group = 'Suara'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compileOnly 'org.springframework.boot:spring-boot-starter-security'
+	compileOnly 'org.projectlombok:lombok'
+	compileOnly 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
+	compileOnly group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
+	annotationProcessor 'org.projectlombok:lombok'
+	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'com.h2database:h2'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.auth0:java-jwt:3.18.2'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework:spring-web:5.3.12'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+	}
+}
+
+sonarqube {
+	properties {
+		property "sonar.projectKey", "suara"
+		property "sonar.organization", "suara"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property "sonar.login", "49e8c9ceb7d3f717baca647261c9038b3bb8630f"
+	}
+}
+
+test.finalizedBy jacocoTestReport
